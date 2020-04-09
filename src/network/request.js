@@ -1,9 +1,13 @@
 import axios from 'axios'
 
+import basePath from '../requestPath'
+
 export function request (config) {
   // 1.创建axios的实例
   const instance = axios.create({
-    baseURL: 'http://123.207.32.32:8000',
+    // 防止接口泄露，故读取本地文件
+    // 需要资料和新接口的添加老师微信 coderwhy002
+    baseURL: basePath(),
     timeout: 5000
   })
 
