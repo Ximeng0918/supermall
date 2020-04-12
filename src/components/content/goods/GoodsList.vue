@@ -5,10 +5,11 @@
 </template>
 
 <script>
-
+// 商品组件
 import GoodsListItem from './GoodsListItem'
 
 export default {
+  // 商品列表组件
   name: 'GoodsList',
   props: {
     goods: {

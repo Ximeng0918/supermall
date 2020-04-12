@@ -14,6 +14,7 @@
 
 <script>
 export default {
+  // 商品类型选项卡组件
   name: 'TabControl',
   props: {
     titles: {

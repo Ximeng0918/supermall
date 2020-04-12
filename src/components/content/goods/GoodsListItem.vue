@@ -1,6 +1,6 @@
 <template>
-  <div class="goods-item">
-    <img :src="goodsItem.show.img" alt />
+  <div class="goods-item" @click="itemClick">
+    <img :src="showImage" alt @load="imageLoad" />
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -11,6 +11,7 @@
 
 <script>
 export default {
+  // 商品组件
   name: 'GoodsListItem',
   props: {
     goodsItem: {
@@ -18,6 +19,20 @@ export default {
       default () {
         return {}
       }
+    }
+  },
+  computed: {
+    showImage () {
+      // 返回图片路径show.img--主页图片路径   image--详情推荐
+      return this.goodsItem.image || this.goodsItem.show.img
+    }
+  },
+  methods: {
+    imageLoad () { // 监听图片加载完成
+      this.$bus.$emit('itemImageLoad')
+    },
+    itemClick () {
+      this.$router.push('/detail/' + this.goodsItem.iid)
     }
   }
 }

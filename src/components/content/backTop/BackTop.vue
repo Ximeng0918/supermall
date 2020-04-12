@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  // 回到顶部组件
   name: 'BackTop'
 }
 </script>

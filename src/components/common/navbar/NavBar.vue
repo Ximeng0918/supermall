@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  // 导航组件
+  // 基本导航组件
   name: 'NavBar'
 }
 </script>
@@ -24,7 +24,7 @@ export default {
   display: flex;
   line-height: 44px;
   text-align: center;
-  box-shadow: 0 1px 1px rgba(100,100,100,.1)
+  box-shadow: 0 1px 1px rgba(100, 100, 100, 0.1);
 }
 .left,
 .right {

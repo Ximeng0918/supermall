@@ -29,6 +29,7 @@ import TabBar from 'components/common/tabbar/TabBar'
 import TabBarItem from 'components/common/tabbar/TabBarItem'
 
 export default {
+  // 底部导航栏
   name: 'MainTabBar',
   components: {
     TabBar,

@@ -1,7 +1,8 @@
 <template>
   <div class="recommend">
     <div v-for="(item,index) in recommends" :key="index" class="recommend-item">
-      <a href="javascript:;"><!--:href="item.link"-->
+      <a href="javascript:;">
+        <!--:href="item.link"-->
         <img :src="item.image" alt />
         <div>{{item.title}}</div>
       </a>
@@ -11,7 +12,8 @@
 
 <script>
 export default {
-  name: 'RecommendView', // 推荐信息组件
+  // 推荐信息组件
+  name: 'RecommendView',
   props: {
     recommends: {
       type: Array,
