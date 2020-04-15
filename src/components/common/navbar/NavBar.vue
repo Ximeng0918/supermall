@@ -22,7 +22,7 @@ export default {
 <style scoped>
 .nav-bar {
   display: flex;
-  line-height: 44px;
+  line-height: 45px;
   text-align: center;
   box-shadow: 0 1px 1px rgba(100, 100, 100, 0.1);
 }

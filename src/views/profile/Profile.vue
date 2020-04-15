@@ -1,6 +1,6 @@
 <template>
   <div>
-    <scroll class="content" @scroll="contentScroll" :probe-type="prototype">
+    <scroll class="content" @scroll="contentScroll" :probe-type="prototype" v-show="false">
       <ul>
         <li>个人信息1</li>
         <li>个人信息2</li>
@@ -110,6 +110,7 @@
 <script>
 // 导入组件
 import Scroll from '@/components/common/scroll/Scroll'
+
 export default {
   name: 'Profile',
   data () {
@@ -129,9 +130,9 @@ export default {
 </script>
 
 <style scoped>
-.content {
-  height: 300px;
-  background-color: red;
-  overflow: hidden;
-}
+  .content {
+    height: 300px;
+    background-color: red;
+    overflow: hidden;
+  }
 </style>

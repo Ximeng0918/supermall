@@ -20,13 +20,13 @@
       <detail-recommend-info ref="recommend" :recommend-list="recommend" />
     </scroll>
     <!-- 底部工具栏组件 -->
-    <detail-bottom-bar />
+    <detail-bottom-bar @addToCart="addToCart" />
   </div>
 </template>
 
 <script>
 // 商品详情页面导航栏组件
-import DetailNavBar from '@/views/detail/childComps/DetailNavBar'
+import DetailNavBar from 'views/detail/childComps/DetailNavBar'
 // 商品详情页轮播图组件
 import DetailSwiper from './childComps/DetailSwiper'
 // 商品基本信息组件
@@ -48,11 +48,13 @@ import DetailBottomBar from './childComps/DetailBottomBar'
 import Scroll from 'components/common/scroll/Scroll'
 
 // 请求数据
-import { getDetail, getRecommend, Goods, Shop, GoodsParam } from '@/network/detail'
+import { getDetail, getRecommend, Goods, Shop, GoodsParam } from 'network/detail'
 // 混入
-import { itemListenerMixin } from '@/common/mixin'
+import { itemListenerMixin } from 'common/mixin'
 // 防抖函数
-import { debounce } from '@/common/utils'
+import { debounce } from 'common/utils'
+
+import { mapActions } from 'vuex'
 
 export default {
   // 商品详情页
@@ -131,6 +133,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['addCart']),
     imageLoad () {
       this.getThemeTopY()
       this.$refs.scroll.refresh()
@@ -148,6 +151,24 @@ export default {
           this.$refs.nav.currentIndex = this.currentIndex
         }
       }
+    },
+    addToCart () {
+      // 添加到购物车
+      // 1.获取购物车需要展示的信息
+      const product = {}
+      product.iid = this.iid
+      product.image = this.topImages[0]
+      product.title = this.goodsInfo.title
+      product.desc = this.goodsInfo.desc
+      product.price = this.goodsInfo.realPrice
+      // 2.将商品添加到购物车中
+      // this.$store.commit('addCart', product)
+      // this.$store.dispatch('addCart', product).then(res => {
+      //   this.$toast(res, 2000)
+      // })
+      this.addCart(product).then(res => {
+        this.$toast(res)
+      })
     }
   }
 }

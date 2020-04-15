@@ -50,17 +50,17 @@ import FeatureView from './childComps/FeatureView'
 // 商品类型选项卡组件
 import TabControl from 'components/content/tabControl/TabControl'
 // 商品列表组件
-import GoodsList from '@/components/content/goods/GoodsList'
+import GoodsList from 'components/content/goods/GoodsList'
 // 封装的Scroll滚动组件
-import Scroll from '@/components/common/scroll/Scroll'
+import Scroll from 'components/common/scroll/Scroll'
 // 回到顶部组件
-import BackTop from '@/components/content/backTop/BackTop'
+import BackTop from 'components/content/backTop/BackTop'
 
 // 获取首页数据
-import { getHomeMultidata, getHomeGoods } from '@/network/home'
+import { getHomeMultidata, getHomeGoods } from 'network/home'
 
 // 混入
-import { itemListenerMixin } from '@/common/mixin'
+import { itemListenerMixin } from 'common/mixin'
 
 export default {
   // 首页
@@ -80,9 +80,18 @@ export default {
       banners: [], // 轮播图图片数组
       recommends: [], // 推荐信息
       goods: { // 商品信息
-        pop: { page: 0, list: [] },
-        new: { page: 0, list: [] },
-        sell: { page: 0, list: [] }
+        pop: {
+          page: 0,
+          list: []
+        },
+        new: {
+          page: 0,
+          list: []
+        },
+        sell: {
+          page: 0,
+          list: []
+        }
       },
       currentType: 'pop', // 当前商品类型
       isShowBackTop: false, // 是否显示回到顶部图标，默认false（不显示）
@@ -179,30 +188,33 @@ export default {
 </script>
 
 <style scoped>
-#home {
-  /* padding-top: 44px; */
-  height: 100vh;
-  position: relative;
-}
-.home-nav {
-  background-color: var(--color-tint);
-  color: #fff;
-}
-/* .content {
-  height: calc(100% - 93px);
-  overflow: hidden;
-} */
-.content {
-  overflow: hidden;
+  #home {
+    /* padding-top: 44px; */
+    height: 100vh;
+    position: relative;
+  }
 
-  position: absolute;
-  top: 44px;
-  bottom: 49px;
-  left: 0;
-  right: 0;
-}
-.tab-control {
-  position: relative;
-  z-index: 9;
-}
+  .home-nav {
+    background-color: var(--color-tint);
+    color: #fff;
+  }
+
+  /* .content {
+    height: calc(100% - 93px);
+    overflow: hidden;
+  } */
+  .content {
+    overflow: hidden;
+
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
+  }
+
+  .tab-control {
+    position: relative;
+    z-index: 9;
+  }
 </style>
