@@ -1,86 +1,164 @@
 <template>
-  <div class="wrapper" ref="wrapper">
-    <ul class="content">
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表11</li>
-      <li>列表12</li>
-      <li>列表13</li>
-      <li>列表14</li>
-      <li>列表15</li>
-      <li>列表16</li>
-      <li>列表17</li>
-      <li>列表18</li>
-      <li>列表19</li>
-      <li>列表20</li>
-      <li>列表21</li>
-      <li>列表22</li>
-      <li>列表23</li>
-      <li>列表24</li>
-      <li>列表25</li>
-      <li>列表26</li>
-      <li>列表27</li>
-      <li>列表28</li>
-      <li>列表29</li>
-      <li>列表30</li>
-      <li>列表31</li>
-      <li>列表32</li>
-      <li>列表33</li>
-      <li>列表34</li>
-      <li>列表35</li>
-      <li>列表36</li>
-      <li>列表37</li>
-      <li>列表38</li>
-      <li>列表39</li>
-      <li>列表40</li>
-      <li>列表41</li>
-      <li>列表42</li>
-      <li>列表43</li>
-      <li>列表44</li>
-      <li>列表45</li>
-      <li>列表46</li>
-      <li>列表47</li>
-      <li>列表48</li>
-      <li>列表49</li>
-      <li>列表50</li>
-    </ul>
+  <div id="category">
+    <!--基本导航组件-->
+    <nav-bar class="nav-bar"><div slot="center">商品分类</div></nav-bar>
+    <div class="content">
+      <!--商品分类菜单组件-->
+      <tab-menu :categories="categories" @selectItem="selectItem"/>
+      <!--封装的Scroll滚动组件-->
+      <scroll id="tab-content" :data="[categoryData]">
+        <div>
+          <!--商品子分类列表-->
+          <tab-content-category :subcategories="showSubcategory"/>
+          <!-- 商品类型选项卡组件 -->
+          <tab-control :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl" />
+          <!-- 商品列表组件 -->
+          <goods-list :goods="showGoods" />
+        </div>
+      </scroll>
+    </div>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+// 基本导航组件
+import NavBar from 'components/common/navbar/NavBar'
+// 商品分类菜单组件
+import TabMenu from './childComps/TabMenu'
+// 商品子分类列表
+import TabContentCategory from './childComps/TabContentCategory'
+// 商品类型选项卡组件
+import TabControl from 'components/content/tabControl/TabControl'
+// 商品列表组件
+import GoodsList from 'components/content/goods/GoodsList'
+
+// 封装的Scroll滚动组件
+import Scroll from 'components/common/scroll/Scroll'
+
+// 获取数据
+import { getCategory, getSubcategory, getCategoryDetail } from 'network/category'
+
+import { POP, SELL, NEW } from '@/common/const'
+
+import { tabControlMixin } from '@/common/mixin'
+
 export default {
   name: 'Category',
+  components: {
+    NavBar,
+    TabMenu,
+    TabContentCategory,
+    TabControl,
+    GoodsList,
+    Scroll
+  },
+  mixins: [tabControlMixin],
   data () {
     return {
-      scroll: null
+      categories: [], // 商品分类
+      categoryData: {}, // 每个类别的子数据
+      currentIndex: -1 // 当前子分类索引
     }
   },
   mounted () {
-    this.scroll = new BScroll(this.$refs.wrapper, {
-      probeType: 2
-    })
-    this.scroll.on('scroll', (position) => {
-      console.log(position)
-    })
+    // this.scroll = new BScroll(this.$refs.wrapper, {
+    //   probeType: 2
+    // })
+    // this.scroll.on('scroll', (position) => {
+    //   console.log(position)
+    // })
+  },
+  created () {
+    // 1.请求商品分类数据
+    this.getCategory()
+  },
+  computed: {
+    // 显示对应商品子分类列表
+    showSubcategory () {
+      if (this.currentIndex === -1) return {}
+      return this.categoryData[this.currentIndex].subcategories
+    },
+    showGoods () {
+      if (this.currentIndex === -1) return []
+      return this.categoryData[this.currentIndex].categoryDetail[this.currentType]
+    }
+  },
+  methods: {
+    // 获取商品分类数据
+    getCategory () {
+      getCategory().then(res => {
+        // 1.获取分类数据
+        this.categories = res.data.category.list
+        // 2.初始化每个类别的子数据
+        for (let i = 0; i < this.categories.length; i++) {
+          this.categoryData[i] = {
+            subcategories: {},
+            categoryDetail: {
+              pop: [],
+              new: [],
+              sell: []
+            }
+          }
+        }
+        // 3.请求第一个分类的子分类数据
+        this.getSubcategories(0)
+      })
+    },
+    // 根据分类获取子分类
+    getSubcategories (index) {
+      this.currentIndex = index
+      const mailKey = this.categories[index].maitKey
+      getSubcategory(mailKey).then(res => {
+        this.categoryData[index].subcategories = res.data
+        this.categoryData = { ...this.categoryData }
+        this.getCategoryDetail(POP)
+        this.getCategoryDetail(SELL)
+        this.getCategoryDetail(NEW)
+      })
+    },
+    getCategoryDetail (type) {
+      // 1.获取请求的miniWallkey
+      const miniWallkey = this.categories[this.currentIndex].miniWallkey
+      // 2.发送请求,传入miniWallkey和type
+      getCategoryDetail(miniWallkey, type).then(res => {
+        // 3.将获取的数据保存下来
+        this.categoryData[this.currentIndex].categoryDetail[type] = res
+        this.categoryData = { ...this.categoryData }
+      })
+    },
+    // 事件响应相关的方法
+    // 根据分类获取子分类
+    selectItem (index) {
+      this.getSubcategories(index)
+    }
   }
 }
 </script>
 
 <style scoped>
-.wrapper {
-  height: 150px;
-  background-color: red;
+  #category {
+    height: 100vh;
+  }
 
-  overflow: hidden;
-  /*overflow-y: scroll;*/
-}
+  .nav-bar {
+    background-color: var(--color-tint);
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .content {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 44px;
+    bottom: 49px;
+
+    display: flex;
+  }
+
+  #tab-content {
+    height: 100%;
+    flex: 1;
+  }
 </style>

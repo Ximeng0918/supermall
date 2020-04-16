@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  // 底部导航栏item
   name: 'TabBarItem',
   props: {
     path: String,

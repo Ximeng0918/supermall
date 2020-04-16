@@ -41,13 +41,13 @@ export default {
     //   type: Boolean,
     //   default: false
     // },
-    // /**
-    //   * 列表的数据
-    //   */
-    // data: {
-    //   type: Array,
-    //   default: null
-    // },
+    /**
+      * 列表的数据
+      */
+    data: {
+      type: Array,
+      default: null
+    },
     // /**
     //  * 是否派发滚动到底部的事件，用于上拉加载
     //  */
@@ -69,13 +69,13 @@ export default {
     //   type: Boolean,
     //   default: false
     // },
-    // /**
-    //   * 当数据更新后，刷新scroll的延时。
-    //   */
-    // refreshDelay: {
-    //   type: Number,
-    //   default: 20
-    // },
+    /**
+      * 当数据更新后，刷新scroll的延时。
+      */
+    refreshDelay: {
+      type: Number,
+      default: 20
+    },
     /**
      * 是否派发滚动到底部的事件，用于上拉加载
      */
@@ -127,6 +127,14 @@ export default {
     },
     getScrollY () {
       return this.scroll ? this.scroll.y : 0
+    }
+  },
+  watch: {
+    // 监听数据的变化，延时refreshDelay时间后调用refresh方法重新计算，保证滚动效果正常
+    data () {
+      setTimeout(() => {
+        this.refresh()
+      }, this.refreshDelay)
     }
   }
 }

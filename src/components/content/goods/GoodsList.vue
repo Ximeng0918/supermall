@@ -21,11 +21,6 @@ export default {
   },
   components: {
     GoodsListItem
-  },
-  data () {
-    return {
-
-    }
   }
 }
 </script>

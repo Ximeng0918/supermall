@@ -23,8 +23,8 @@ export default {
   },
   computed: {
     showImage () {
-      // 返回图片路径show.img--主页图片路径   image--详情推荐
-      return this.goodsItem.image || this.goodsItem.show.img
+      // 返回图片路径  image--详情推荐  img  分类页面  show.img--主页图片路径
+      return this.goodsItem.image || this.goodsItem.img || this.goodsItem.show.img
     }
   },
   methods: {
